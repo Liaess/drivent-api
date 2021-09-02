@@ -37,4 +37,8 @@ export default class Ticket extends BaseEntity {
     ticket.populateFromData(data);
     await ticket.save();
   }
+
+  static async getByUserId(userId: number) {
+    return await this.findOne({ where: { userId } });
+  }
 }
