@@ -2,7 +2,7 @@ import TicketAlreadyPurchasedError from "@/errors/TicketAlreadyPurchased";
 import TicketData from "@/interfaces/ticket";
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity("ticket")
+@Entity("tickets")
 export default class Ticket extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
