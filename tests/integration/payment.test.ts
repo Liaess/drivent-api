@@ -1,12 +1,16 @@
 import supertest from "supertest";
+import faker from "faker";
+import httpStatus from "http-status";
+import dayjs from "dayjs";
 
 import app, { init } from "../../src/app";
 import Setting from "../../src/entities/Setting";
+import User from "../../src/entities/User";
 import { clearDatabase, endConnection } from "../utils/database";
 import { createBasicSettings } from "../utils/app";
+import { createUser } from "../factories/userFactory";
 
 const agent =  supertest(app);
-let settings = null;
 
 beforeAll(async () => {
   await init();
@@ -14,7 +18,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await clearDatabase();
-  settings = await createBasicSettings();
+  await createBasicSettings();
 });
 
 afterAll(async () => {
@@ -22,20 +26,56 @@ afterAll(async () => {
   await endConnection();
 });
 
-describe("GET /event", () => {
-  it("should return event settings", async () => {
-    const response = await agent.get("/event");
-    expect(response.body).toEqual({
-      startDate: await getSettingValue("start_date"),
-      endDate: await getSettingValue("end_date"),
-      eventTitle: await getSettingValue("event_title"),
-      backgroundImage: await getSettingValue("background_image"),
-      logoImage: await getSettingValue("logo_image")
-    });
+describe("POST /users", () => {
+  it("should create a new user", async () => {
+    const userData = {
+      email: faker.internet.email(),
+      password: "123456"
+    };
+
+    const response = await agent.post("/users").send(userData);
+
+    expect(response.statusCode).toEqual(httpStatus.CREATED);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        email: userData.email,
+        createdAt: expect.any(String)
+      })
+    );
+
+    const userDatabase = await User.findOne({ email: userData.email });
+    expect(userDatabase?.email).toEqual(userData.email);
+  });
+
+  it("should not allow creation of user with email that has been already used", async () => {
+    const user = await createUser();
+    const userData = {
+      email: user.email,
+      password: "1234567"
+    };
+
+    const response = await agent.post("/users").send(userData);
+
+    expect(response.statusCode).toEqual(httpStatus.CONFLICT);
+
+    const usersDatabase = await User.find({ email: userData.email });
+    expect(usersDatabase.length).toEqual(1);
+  });
+
+  it("should not allow creation of user before event start date", async () => {
+    await Setting.update({ name: "start_date" }, { value: dayjs().add(1, "day").toISOString() });
+
+    const userData = {
+      email: faker.internet.email(),
+      password: "123456"
+    };
+
+    const response = await agent.post("/users").send(userData);
+
+    expect(response.statusCode).toEqual(httpStatus.BAD_REQUEST);
+
+    const usersDatabase = await User.find({ email: userData.email });
+    expect(usersDatabase.length).toEqual(0);
   });
 });
-
-async function getSettingValue(name: string) {
-  const setting = await Setting.findOne({ name });
-  return setting?.value;
-}

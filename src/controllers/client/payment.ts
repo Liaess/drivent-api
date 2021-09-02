@@ -8,7 +8,7 @@ export async function getTicketInfos(req: Request, res: Response) {
   const ticketInfo = await ticketService.getTicket(req.user.id);
   
   if(!ticketInfo.isPaid) {
-    return res.sendStatus(httpStatus.NO_CONTENT);
+    return res.send(ticketInfo).status(httpStatus.NOT_MODIFIED);
   }
 
   res.send(ticketInfo).status(httpStatus.OK);
