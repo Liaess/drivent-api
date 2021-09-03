@@ -1,15 +1,19 @@
-import dotenv from "dotenv";
-import path from "path";
-import fs from "fs";
+const dotenv = require("dotenv");
+const fs = require("fs");
+const path = require("path");
 
-const envPath = process.env.NODE_ENV === "test" ? ".env.test" : ".env";
-const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, envPath)));
+try {
+  const envPath = process.env.NODE_ENV === "test" ? ".env.test" : ".env";
+  const envConfig = dotenv.parse(
+    fs.readFileSync(path.join(__dirname, envPath))
+  );
 
-for (const config in envConfig) {
-  process.env[config] = envConfig[config];
-}
+  for (const config in envConfig) {
+    process.env[config] = envConfig[config];
+  }
+} catch (err) {}
 
-export default {
+module.exports = {
   type: "postgres",
   url: process.env.DATABASE_URL,
   migrationsTableName: "migrations",
@@ -17,6 +21,11 @@ export default {
   migrations: ["dist/migrations/*.js"],
   cli: {
     migrationsDir: "src/migrations",
-    entitiesDir: "dist/entities/*.js"
-  }
+    entitiesDir: "dist/entities/*.js",
+  },
+  extra: {
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  },
 };
