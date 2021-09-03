@@ -7,11 +7,11 @@ import TicketData from "@/interfaces/ticket";
 export async function getTicketInfos(req: Request, res: Response) {
   const ticketInfo = await ticketService.getTicket(req.user.id);
   
-  if(!ticketInfo.isPaid) {
-    return res.send(ticketInfo).status(httpStatus.NOT_MODIFIED);
+  if(ticketInfo === undefined) {
+    return res.sendStatus(httpStatus.NOT_FOUND);
+  } else {
+    res.send(ticketInfo).status(httpStatus.OK);
   }
-
-  res.send(ticketInfo).status(httpStatus.OK);
 }
 
 export async function savePaymentInfo(req: Request, res: Response) {

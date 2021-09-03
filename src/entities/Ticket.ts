@@ -22,14 +22,14 @@ export default class Ticket extends BaseEntity {
   populateFromData(data: TicketData) {
     this.isOnline = data.isOnline;
     this.hasHotelReservation = data.hasHotelReservation;
-    this.isPaid = data.isPaid;
+    // this.isPaid = data.isPaid;
     this.userId = data.userId;
   }
 
   static async createOrUpdate(data: TicketData) {
     let ticket = await this.findOne({ where: { userId: data.userId } });
 
-    if (ticket.isPaid) {
+    if (ticket?.isPaid) {
       throw new TicketAlreadyPurchasedError();
     }
 
