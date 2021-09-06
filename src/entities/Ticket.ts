@@ -1,5 +1,5 @@
 import TicketAlreadyPurchasedError from "@/errors/TicketAlreadyPurchased";
-import TicketData from "@/interfaces/ticket";
+import { TicketData } from "@/interfaces/ticket";
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity("tickets")
@@ -22,7 +22,7 @@ export default class Ticket extends BaseEntity {
   populateFromData(data: TicketData) {
     this.isOnline = data.isOnline;
     this.hasHotelReservation = data.hasHotelReservation;
-    // this.isPaid = data.isPaid;
+    this.isPaid = data.isPaid;
     this.userId = data.userId;
   }
 
@@ -36,6 +36,7 @@ export default class Ticket extends BaseEntity {
     ticket ||= Ticket.create();
     ticket.populateFromData(data);
     await ticket.save();
+    return ticket;
   }
 
   static async getByUserId(userId: number) {

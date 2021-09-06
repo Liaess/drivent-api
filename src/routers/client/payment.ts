@@ -9,6 +9,11 @@ import ticketSchema from "@/schemas/ticketSchema";
 const router = Router();
 
 router.get("/", controller.getTicketInfos);
-router.post("/confirmation", schemaValidatingMiddleware(ticketSchema), controller.savePaymentInfo);
+router.post(
+  "/confirmation",
+  schemaValidatingMiddleware(ticketSchema),
+  controller.savePaymentInfo
+);
+router.put("/confirmation", controller.updatePaymentStatus);
 
 export default router;
