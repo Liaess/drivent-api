@@ -47,5 +47,9 @@ export default class User extends BaseEntity {
 
     return null;
   }
+
+  static async getUserById(id: number) {
+    return await this.findOne({ id });
+  }
 }
 
