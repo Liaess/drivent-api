@@ -27,7 +27,7 @@ afterAll(async () => {
 });
 
 describe("GET /payment", () => {
-  it("should return ticket infos with status OK", async () => {
+  it("should return status OK", async () => {
     const user = await createUser();
     const session = await createSession(user);
     const headers = { authorization: `Bearer ${session.token}` };
@@ -36,15 +36,16 @@ describe("GET /payment", () => {
     const response = await agent.get("/payment").set(headers);
 
     expect(response.statusCode).toEqual(httpStatus.OK);
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        id: expect.any(Number),
-        isOnline: expect.any(Boolean),
-        hasHotelReservation: expect.any(Boolean),
-        isPaid: expect.any(Boolean),
-        userId: expect.any(Number),
-      })
-    );
+  });
+
+  it("should return ticket infos", async () => {
+    const user = await createUser();
+    const session = await createSession(user);
+    const headers = { authorization: `Bearer ${session.token}` };
+    const ticket = await createUnpaidTicket(user);
+
+    const response = await agent.get("/payment").set(headers);
+
     expect(response.body).toEqual(ticket);
   });
 
@@ -74,7 +75,7 @@ describe("GET /payment", () => {
 });
 
 describe("POST /payment/confirmation", () => {
-  it("should return new ticket infos with created status", async () => {
+  it("should return created status", async () => {
     const user = await createUser();
     const session = await createSession(user);
     const headers = { authorization: `Bearer ${session.token}` };
@@ -87,6 +88,20 @@ describe("POST /payment/confirmation", () => {
       .set(headers);
 
     expect(response.statusCode).toEqual(httpStatus.CREATED);
+  });
+
+  it("should return new ticket infos ", async () => {
+    const user = await createUser();
+    const session = await createSession(user);
+    const headers = { authorization: `Bearer ${session.token}` };
+    const body = ticketBody(user, false);
+    const { isOnline, hasHotelReservation } = body;
+
+    const response = await agent
+      .post("/payment/confirmation")
+      .send({ isOnline, hasHotelReservation })
+      .set(headers);
+
     expect(response.body).toEqual(
       expect.objectContaining({
         ...body,
@@ -114,6 +129,39 @@ describe("POST /payment/confirmation", () => {
 });
 
 describe("PUT /payment/confirmation", () => {
+  it("should return  OK status", async () => {
+    const user = await createUser();
+    const session = await createSession(user);
+    const headers = { authorization: `Bearer ${session.token}` };
+    const body = ticketBody(user, true);
+
+    const response = await agent
+      .put("/payment/confirmation")
+      .send({ ...body, id: user.id })
+      .set(headers);
+
+    expect(response.statusCode).toEqual(httpStatus.OK);
+  });
+
+  it("should return updated ticket infos", async () => {
+    const user = await createUser();
+    const session = await createSession(user);
+    const headers = { authorization: `Bearer ${session.token}` };
+    const body = ticketBody(user, true);
+
+    const response = await agent
+      .put("/payment/confirmation")
+      .send({ ...body, id: user.id })
+      .set(headers);
+
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        ...body,
+        id: expect.any(Number),
+      })
+    );
+  });
+
   it("should return updated ticket infos with OK status", async () => {
     const user = await createUser();
     const session = await createSession(user);
