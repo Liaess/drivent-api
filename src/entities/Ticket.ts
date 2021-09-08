@@ -1,5 +1,5 @@
 import TicketAlreadyPurchasedError from "@/errors/TicketAlreadyPurchased";
-import TicketData from "@/interfaces/ticket";
+import { TicketData } from "@/interfaces/ticket";
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity("tickets")
@@ -29,12 +29,17 @@ export default class Ticket extends BaseEntity {
   static async createOrUpdate(data: TicketData) {
     let ticket = await this.findOne({ where: { userId: data.userId } });
 
-    if (ticket.isPaid) {
+    if (ticket?.isPaid) {
       throw new TicketAlreadyPurchasedError();
     }
 
     ticket ||= Ticket.create();
     ticket.populateFromData(data);
     await ticket.save();
+    return ticket;
+  }
+
+  static async getByUserId(userId: number) {
+    return await this.findOne({ where: { userId } });
   }
 }
