@@ -10,7 +10,7 @@ export async function getTicketInfos(req: Request, res: Response) {
   if (ticketInfo === undefined) {
     return res.sendStatus(httpStatus.NOT_FOUND);
   } else {
-    res.send(ticketInfo).status(httpStatus.OK);
+    res.status(httpStatus.OK).send(ticketInfo);
   }
 }
 
@@ -18,11 +18,11 @@ export async function savePaymentInfo(req: Request, res: Response) {
   const ticketData = req.body as TicketData;
   ticketData.userId = req.user.id;
   const savedTicket = await ticketService.createPayment(ticketData);
-  res.send(savedTicket).status(httpStatus.CREATED);
+  res.status(httpStatus.CREATED).send(savedTicket);
 }
 
 export async function updatePaymentStatus(req: Request, res: Response) {
   const ticketData = req.body as TicketDataToUpdate;
   const savedTicket = await ticketService.updatePaymentStatus(ticketData);
-  res.send(savedTicket).status(httpStatus.OK);
+  res.status(httpStatus.OK).send(savedTicket);
 }

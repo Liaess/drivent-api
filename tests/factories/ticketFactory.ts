@@ -1,19 +1,25 @@
 import Ticket from "../../src/entities/Ticket";
+import User from "../../src/entities/User";
+import { TicketData } from "../../src/interfaces/ticket";
 
-export async function createUnpaiedTicket() {
-  const ticket = Ticket.create({
+export function ticketBody(user: User, isPaid: boolean) {
+  const ticket: TicketData = {
     isOnline: false,
     hasHotelReservation: false,
-    isPaid: false
-  });
+    isPaid,
+    userId: user.id,
+  };
   return ticket;
 }
 
-export async function createPaiedTicket() {
-  const ticket = Ticket.create({
-    isOnline: false,
-    hasHotelReservation: false,
-    isPaid: false
-  });
+export async function createUnpaidTicket(user: User) {
+  const ticket = Ticket.create(ticketBody(user, false));
+  await ticket.save();
+  return ticket;
+}
+
+export async function createPaidTicket(user: User) {
+  const ticket = Ticket.create(ticketBody(user, true));
+  await ticket.save();
   return ticket;
 }
