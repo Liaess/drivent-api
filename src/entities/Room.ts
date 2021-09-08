@@ -23,4 +23,8 @@ export default class Room extends BaseEntity {
 
   @ManyToOne(() => Hotel, hotel => hotel.rooms)
   hotel: Hotel;
+
+  static async getRoom(id: number) {
+    return await this.findOne( id );
+  }
 }
