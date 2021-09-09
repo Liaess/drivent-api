@@ -162,26 +162,6 @@ describe("PUT /payment/confirmation", () => {
     );
   });
 
-  it("should return updated ticket infos with OK status", async () => {
-    const user = await createUser();
-    const session = await createSession(user);
-    const headers = { authorization: `Bearer ${session.token}` };
-    const body = ticketBody(user, true);
-
-    const response = await agent
-      .put("/payment/confirmation")
-      .send({ ...body, id: user.id })
-      .set(headers);
-
-    expect(response.statusCode).toEqual(httpStatus.OK);
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        ...body,
-        id: expect.any(Number),
-      })
-    );
-  });
-
   it("should return unauthorized status for invalid token", async () => {
     const headers = { authorization: `Bearer whateverToken` };
 
