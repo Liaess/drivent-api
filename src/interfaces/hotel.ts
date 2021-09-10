@@ -1,8 +1,7 @@
-import RoomsData from "@/interfaces/room";
-
 interface HotelData {
   name: string;
-  rooms: RoomsData[];
+  image: string;
+  roomTypes: string;
 }
 
 export default HotelData;

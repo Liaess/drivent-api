@@ -1,5 +1,5 @@
 interface RoomsData {
-    number: number;
+    number: string;
     type: string;
     maxCapacity: number;
     available: number;
