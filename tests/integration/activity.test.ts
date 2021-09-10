@@ -7,7 +7,10 @@ import { clearDatabase, endConnection } from "../utils/database";
 import { createBasicSettings } from "../utils/app";
 import { createUser } from "../factories/userFactory";
 import { createSession } from "../factories/loginFactory";
-import { createActivities } from "../factories/activityFactory";
+import {
+  createActivities,
+  dateWithMultiActivities,
+} from "../factories/activityFactory";
 
 const agent = supertest(app);
 
@@ -67,6 +70,57 @@ describe("GET /activity", () => {
 
   it("should return unauthorized status for unset headers", async () => {
     const response = await agent.get("/activity");
+
+    expect(response.statusCode).toEqual(httpStatus.UNAUTHORIZED);
+  });
+});
+
+describe("POST /activity", () => {
+  it("should return status OK", async () => {
+    const user = await createUser();
+    const session = await createSession(user);
+    const headers = { authorization: `Bearer ${session.token}` };
+    await createActivities();
+    const date = dateWithMultiActivities();
+
+    const response = await agent.post("/activity").send({ date }).set(headers);
+
+    expect(response.statusCode).toEqual(httpStatus.OK);
+  });
+
+  it("should return all activities in a date", async () => {
+    const user = await createUser();
+    const session = await createSession(user);
+    const headers = { authorization: `Bearer ${session.token}` };
+    await createActivities();
+    const date = dateWithMultiActivities();
+
+    const response = await agent.post("/activity").send({ date }).set(headers);
+
+    expect(response.body.length).toEqual(2);
+  });
+
+  it("should return not found status for inexistent activities", async () => {
+    const user = await createUser();
+    const session = await createSession(user);
+    const headers = { authorization: `Bearer ${session.token}` };
+    const date = dateWithMultiActivities();
+
+    const response = await agent.post("/activity").send({ date }).set(headers);
+
+    expect(response.statusCode).toEqual(httpStatus.NOT_FOUND);
+  });
+
+  it("should return unauthorized status for invalid token", async () => {
+    const headers = { authorization: `Bearer whateverToken` };
+
+    const response = await agent.post("/activity").set(headers);
+
+    expect(response.statusCode).toEqual(httpStatus.UNAUTHORIZED);
+  });
+
+  it("should return unauthorized status for unset headers", async () => {
+    const response = await agent.post("/activity");
 
     expect(response.statusCode).toEqual(httpStatus.UNAUTHORIZED);
   });

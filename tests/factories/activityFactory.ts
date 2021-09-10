@@ -45,6 +45,8 @@ export async function createActivities() {
 
     await activity.save();
   }
+}
 
-  return locations;
+export function dateWithMultiActivities() {
+  return "2021-09-29 00:00:00";
 }
