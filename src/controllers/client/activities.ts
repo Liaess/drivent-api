@@ -12,3 +12,14 @@ export async function getAllDates(req: Request, res: Response) {
     res.status(httpStatus.OK).send(allDates);
   }
 }
+
+export async function getActivitiesByDate(req: Request, res: Response) {
+  const { date } = req.body;
+  const activities = await activityService.getActivitiesByDate(date);
+
+  if (!activities.length) {
+    return res.sendStatus(httpStatus.NOT_FOUND);
+  } else {
+    res.status(httpStatus.OK).send(activities);
+  }
+}
