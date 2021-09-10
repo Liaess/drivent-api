@@ -1,5 +1,4 @@
 import supertest from "supertest";
-import faker from "faker";
 import httpStatus from "http-status";
 import dayjs from "dayjs";
 
