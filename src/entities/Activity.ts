@@ -40,9 +40,10 @@ export default class Activity extends BaseEntity {
 
   static async getAllDates() {
     return await this.createQueryBuilder("activities")
-      .select("activities.date")
-      .groupBy("activities.date")
-      .getMany();
+      .select("date")
+      .distinct(true)
+      .orderBy("date", "ASC")
+      .getRawMany();
   }
 
   static async getActivitiesByDate(date: Date) {
