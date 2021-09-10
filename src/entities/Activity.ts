@@ -46,7 +46,7 @@ export default class Activity extends BaseEntity {
       .getRawMany();
   }
 
-  static async getActivitiesByDate(date: Date) {
+  static async getActivitiesByDate(date: Date) {   
     return await this.find({ where: { date } });
   }
 
