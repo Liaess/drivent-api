@@ -11,6 +11,7 @@ import {
   createActivities,
   dateWithMultiActivities,
 } from "../factories/activityFactory";
+import Activity from "../../src/entities/Activity";
 
 const agent = supertest(app);
 
@@ -44,10 +45,15 @@ describe("GET /activity", () => {
     const session = await createSession(user);
     const headers = { authorization: `Bearer ${session.token}` };
     await createActivities();
+    const distinctDates = await Activity.createQueryBuilder("activities")
+      .select("date")
+      .distinct(true)
+      .orderBy("date", "ASC")
+      .getRawMany();
 
     const response = await agent.get("/activity").set(headers);
 
-    expect(response.body.length).toEqual(3);
+    expect(response.body.length).toEqual(distinctDates.length);
   });
 
   it("should return not found status for inexistent activities", async () => {
@@ -94,10 +100,11 @@ describe("POST /activity", () => {
     const headers = { authorization: `Bearer ${session.token}` };
     await createActivities();
     const date = dateWithMultiActivities();
+    const activitiesByDate = await Activity.find({ where: { date } });
 
     const response = await agent.post("/activity").send({ date }).set(headers);
 
-    expect(response.body.length).toEqual(2);
+    expect(response.body.length).toEqual(activitiesByDate.length);
   });
 
   it("should return not found status for inexistent activities", async () => {
