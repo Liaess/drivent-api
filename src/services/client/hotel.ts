@@ -13,5 +13,6 @@ export async function createReserve(userRoomData: UserRoomData) {
 }
 
 export async function getUserRoomAndHotelInfo(userRoomData: UserRoomData) {
-  return await User_Room.getRoomAndHotelInfo(userRoomData);
+  const rooms = await User_Room.getRoomAndHotelInfo(userRoomData);
+  return rooms;
 }

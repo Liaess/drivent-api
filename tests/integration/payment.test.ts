@@ -1,5 +1,4 @@
 import supertest from "supertest";
-import faker from "faker";
 import httpStatus from "http-status";
 import dayjs from "dayjs";
 
@@ -56,7 +55,7 @@ describe("GET /payment", () => {
 
     const response = await agent.get("/payment").set(headers);
 
-    expect(response.statusCode).toEqual(httpStatus.NOT_FOUND);
+    expect(response.statusCode).toEqual(httpStatus.NO_CONTENT);
   });
 
   it("should return unauthorized status for invalid token", async () => {

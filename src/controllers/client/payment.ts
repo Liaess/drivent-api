@@ -8,7 +8,7 @@ export async function getTicketInfos(req: Request, res: Response) {
   const ticketInfo = await ticketService.getTicket(req.user.id);
 
   if (ticketInfo === undefined) {
-    return res.sendStatus(httpStatus.NOT_FOUND);
+    return res.sendStatus(httpStatus.NO_CONTENT);
   } else {
     res.status(httpStatus.OK).send(ticketInfo);
   }
