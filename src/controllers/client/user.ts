@@ -15,7 +15,7 @@ export async function sendEmail(req: Request, res: Response) {
   const checkEmail = await service.findUserByEmail(email);
   if (checkEmail) {
     await Recovery.insert({ email, token });
-    service.sendEmail(email, token);
+    await service.sendEmail(email, token);
     res.sendStatus(httpStatus.OK);
   } else {
     res.sendStatus(httpStatus.BAD_REQUEST);
