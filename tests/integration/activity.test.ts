@@ -63,7 +63,7 @@ describe("GET /activity", () => {
 
     const response = await agent.get("/activity").set(headers);
 
-    expect(response.statusCode).toEqual(httpStatus.NOT_FOUND);
+    expect(response.statusCode).toEqual(httpStatus.NO_CONTENT);
   });
 
   it("should return unauthorized status for invalid token", async () => {
@@ -115,7 +115,7 @@ describe("POST /activity", () => {
 
     const response = await agent.post("/activity").send({ date }).set(headers);
 
-    expect(response.statusCode).toEqual(httpStatus.NOT_FOUND);
+    expect(response.statusCode).toEqual(httpStatus.NO_CONTENT);
   });
 
   it("should return unauthorized status for invalid token", async () => {

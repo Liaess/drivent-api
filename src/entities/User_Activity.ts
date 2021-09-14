@@ -1,9 +1,11 @@
+import UserAlreadySubscripted from "@/errors/UserAlreadySubscripted";
 import {
   BaseEntity,
   Entity,
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  getManager,
 } from "typeorm";
 import Activity from "./Activity";
 import User from "./User";
@@ -14,14 +16,33 @@ export default class User_Activity extends BaseEntity {
   id: number;
 
   @Column()
-  userId: string;
+  userId: number;
 
   @Column()
-  activityId: string;
+  activityId: number;
 
   @ManyToOne(() => Activity, (activity) => activity.user_activity)
   activity: Activity;
 
   @ManyToOne(() => User, (user) => user.user_activity)
   user: User;
+
+  populateSubscription(userId: number, activityId: number) {
+    this.userId = userId;
+    this.activityId = activityId;
+  }
+
+  static async subscription(userId: number, activityId: number) {
+    let userActivity = await this.findOne({ where: { userId, activityId } });
+
+    if (!userActivity) {
+      throw new UserAlreadySubscripted();
+    }
+
+    userActivity = User_Activity.create();
+    userActivity.populateSubscription(userId, activityId);
+
+    await userActivity.save();
+    await Activity.removeOneSeat(activityId);
+  }
 }

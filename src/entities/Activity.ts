@@ -14,8 +14,8 @@ interface ActivitiesResponse {
   id: number;
   date: Date;
   locationId: number;
-  beginsAt: string;
-  finishesAt: string;
+  beginsAt: number;
+  finishesAt: number;
   title: string;
   remainingSeats: number;
   userRegistered: boolean;
@@ -32,10 +32,10 @@ export default class Activity extends BaseEntity {
   locationId: number;
 
   @Column()
-  beginsAt: string;
+  beginsAt: number;
 
   @Column()
-  finishesAt: string;
+  finishesAt: number;
 
   @Column()
   title: string;

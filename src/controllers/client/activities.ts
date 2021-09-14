@@ -7,7 +7,7 @@ export async function getAllDates(req: Request, res: Response) {
   const allDates = await activityService.getAllDates();
 
   if (!allDates.length) {
-    return res.sendStatus(httpStatus.NOT_FOUND);
+    return res.sendStatus(httpStatus.NO_CONTENT);
   } else {
     res.status(httpStatus.OK).send(allDates);
   }
@@ -22,7 +22,7 @@ export async function getActivitiesByDate(req: Request, res: Response) {
   );
 
   if (!activities.length) {
-    return res.sendStatus(httpStatus.NOT_FOUND);
+    return res.sendStatus(httpStatus.NO_CONTENT);
   } else {
     res.status(httpStatus.OK).send(activities);
   }
