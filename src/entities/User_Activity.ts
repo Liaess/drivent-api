@@ -46,5 +46,6 @@ export default class User_Activity extends BaseEntity {
       await transactionalEntityManager.save(userActivity);
       await transactionalEntityManager.save(activity);
     });
+    return activity.remainingSeats;
   }
 }

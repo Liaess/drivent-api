@@ -71,7 +71,7 @@ export default class Activity extends BaseEntity {
         userId,
       })
       .where({ date })
-      .orderBy("activities.id", "ASC")
+      .orderBy("activities.beginsAt", "ASC")
       .getMany();
 
     const activitiesResponse: ActivitiesResponse[] = activities.map(
