@@ -41,8 +41,10 @@ export default class User_Activity extends BaseEntity {
 
     userActivity = User_Activity.create();
     userActivity.populateSubscription(userId, activityId);
-
-    await userActivity.save();
-    await Activity.removeOneSeat(activityId);
+    const activity = await Activity.removeOneSeat(activityId);
+    getManager().transaction(async (transactionalEntityManager) => {
+      await transactionalEntityManager.save(userActivity);
+      await transactionalEntityManager.save(activity);
+    });
   }
 }

@@ -1,4 +1,5 @@
 import CannotUpdateNotFoundActivity from "@/errors/CannotUpdateNotFoundActivity";
+import InsufficientSeatsError from "@/errors/InsufficientSeatsError";
 import {
   BaseEntity,
   Entity,
@@ -98,8 +99,10 @@ export default class Activity extends BaseEntity {
     if (!activity) {
       throw new CannotUpdateNotFoundActivity();
     }
-
+    if (activity.remainingSeats <= 0) {
+      throw new InsufficientSeatsError();
+    }
     activity.updateSeats(updateValue);
-    await activity.save();
+    return activity;
   }
 }
