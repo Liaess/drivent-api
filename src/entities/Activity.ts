@@ -14,8 +14,8 @@ interface ActivitiesResponse {
   id: number;
   date: Date;
   locationId: number;
-  beginsAt: number;
-  finishesAt: number;
+  beginsAt: string;
+  finishesAt: string;
   title: string;
   remainingSeats: number;
   userRegistered: boolean;
@@ -31,11 +31,11 @@ export default class Activity extends BaseEntity {
   @Column()
   locationId: number;
 
-  @Column()
-  beginsAt: number;
+  @Column({ type: "time with time zone" })
+  beginsAt: string;
 
-  @Column()
-  finishesAt: number;
+  @Column({ type: "time with time zone" })
+  finishesAt: string;
 
   @Column()
   title: string;
