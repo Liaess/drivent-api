@@ -16,12 +16,16 @@ export async function sendEmail(req: Request, res: Response) {
   if (checkEmail) {
     await Recovery.insert({ email, token });
     service.sendEmail(email, token);
-    res.sendStatus(200);
+    res.sendStatus(httpStatus.OK);
   } else {
-    res.sendStatus(400);
+    res.sendStatus(httpStatus.BAD_REQUEST);
   }
 }
 
 export async function updatePassword(req: Request, res: Response) {
-  res.sendStatus(200);
+  const { token } = req.params as { token: string };
+  if (!token) {
+    res.sendStatus(httpStatus.BAD_REQUEST);
+  }
+  res.sendStatus(httpStatus.OK);
 }
