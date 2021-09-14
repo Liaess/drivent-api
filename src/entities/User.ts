@@ -57,4 +57,14 @@ export default class User extends BaseEntity {
 
     return null;
   }
+
+  static async getUserById(id: number) {
+    return await this.findOne({ id });
+  }
+
+  static async findUserByEmail(email: string) {
+    const user = await this.findOne({ where: { email } });
+    if (user) return user.email;
+    else return false;
+  }
 }
