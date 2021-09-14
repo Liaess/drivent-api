@@ -69,6 +69,7 @@ export default class Activity extends BaseEntity {
       .leftJoinAndSelect("users_activities", "user", "user.id= :userId", {
         userId,
       })
+      .where({ date })
       .orderBy("activities.id", "ASC")
       .getMany();
 
@@ -82,7 +83,7 @@ export default class Activity extends BaseEntity {
           finishesAt: a.finishesAt,
           title: a.title,
           remainingSeats: a.remainingSeats,
-          userRegistered: a.user_activity.length > 0,
+          userRegistered: a.user_activity?.length > 0,
         };
       }
     );
