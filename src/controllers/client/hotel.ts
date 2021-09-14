@@ -8,7 +8,7 @@ export async function getHotelsInfo(_req: Request, res: Response) {
   const hotelsInfo = await hotelService.getHotelsWithRooms();
 
   if (!hotelsInfo) {
-    return res.sendStatus(httpStatus.NO_CONTENT);
+    return res.sendStatus(httpStatus.NOT_FOUND);
   }
 
   res.send(hotelsInfo).status(httpStatus.OK);
