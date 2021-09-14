@@ -1,3 +1,4 @@
+import CannotUpdateNotFoundActivity from "@/errors/CannotUpdateNotFoundActivity";
 import {
   BaseEntity,
   Entity,
@@ -9,6 +10,16 @@ import {
 import Location from "./Location";
 import UserActivity from "./User_Activity";
 
+interface ActivitiesResponse {
+  id: number;
+  date: Date;
+  locationId: number;
+  beginsAt: string;
+  finishesAt: string;
+  title: string;
+  remainingSeats: number;
+  userRegistered: boolean;
+}
 @Entity("activities")
 export default class Activity extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -38,6 +49,10 @@ export default class Activity extends BaseEntity {
   @OneToMany(() => UserActivity, (user_activity) => user_activity.activity)
   user_activity: UserActivity[];
 
+  updateSeats(operation: number) {
+    this.remainingSeats += operation;
+  }
+
   static async getAllDates() {
     return await this.createQueryBuilder("activities")
       .select("date")
@@ -46,9 +61,44 @@ export default class Activity extends BaseEntity {
       .getRawMany();
   }
 
-  static async getActivitiesByDate(date: Date) {   
-    return await this.find({ where: { date } });
+  static async getActivitiesByDate(
+    date: Date,
+    userId: number
+  ): Promise<ActivitiesResponse[]> {
+    const activities = await this.createQueryBuilder("activities")
+      .leftJoinAndSelect("users_activities", "user", "user.id= :userId", {
+        userId,
+      })
+      .orderBy("activities.id", "ASC")
+      .getMany();
+
+    const activitiesResponse: ActivitiesResponse[] = activities.map(
+      (a: Activity) => {
+        return {
+          id: a.id,
+          date: a.date,
+          locationId: a.locationId,
+          beginsAt: a.beginsAt,
+          finishesAt: a.finishesAt,
+          title: a.title,
+          remainingSeats: a.remainingSeats,
+          userRegistered: a.user_activity.length > 0,
+        };
+      }
+    );
+
+    return activitiesResponse;
   }
 
-  //   static async updateSeats(activityId: number) {}
+  static async removeOneSeat(activityId: number) {
+    const activity = await this.findOne({ where: { id: activityId } });
+    const updateValue = -1;
+
+    if (!activity) {
+      throw new CannotUpdateNotFoundActivity();
+    }
+
+    activity.updateSeats(updateValue);
+    await activity.save();
+  }
 }

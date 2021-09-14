@@ -15,7 +15,11 @@ export async function getAllDates(req: Request, res: Response) {
 
 export async function getActivitiesByDate(req: Request, res: Response) {
   const { date } = req.body;
-  const activities = await activityService.getActivitiesByDate(new Date(date));
+  const userId = req.user.id;
+  const activities = await activityService.getActivitiesByDate(
+    new Date(date),
+    userId
+  );
 
   if (!activities.length) {
     return res.sendStatus(httpStatus.NOT_FOUND);
