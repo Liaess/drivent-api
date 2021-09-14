@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { v4, validate } from "uuid";
 import User from "@/entities/User";
 import sgMail from "@sendgrid/mail";
+import bcrypt from "bcrypt";
 
 import CannotEnrollBeforeStartDateError from "@/errors/CannotEnrollBeforeStartDate";
 import Setting from "@/entities/Setting";
@@ -57,4 +58,9 @@ export async function sendEmail(email: string, token: string) {
   }
 
   return wasSent;
+}
+
+export async function updatePassword(email: string, password: string) {
+  const hash = bcrypt.hashSync(password, 10);
+  await User.update({ email }, { password: hash });
 }
