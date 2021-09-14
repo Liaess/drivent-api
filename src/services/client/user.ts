@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 
 import CannotEnrollBeforeStartDateError from "@/errors/CannotEnrollBeforeStartDate";
 import Setting from "@/entities/Setting";
+import Recovery from "@/entities/Recovery";
 
 export async function createNewUser(email: string, password: string) {
   const settings = await Setting.getEventSettings();
@@ -24,9 +25,7 @@ export function createToken() {
 }
 
 export async function findUserByEmail(email: string) {
-  const user = await User.findOne({ where: { email } });
-  if (user) return user.email;
-  else return false;
+  return await User.findUserByEmail(email);
 }
 
 export async function sendEmail(email: string, token: string) {
@@ -63,4 +62,19 @@ export async function sendEmail(email: string, token: string) {
 export async function updatePassword(email: string, password: string) {
   const hash = bcrypt.hashSync(password, 10);
   await User.update({ email }, { password: hash });
+}
+
+export async function getEmail(token: string) {
+  const { email } = await Recovery.findOne({
+    where: { token },
+  });
+  return email;
+}
+
+export async function insertRecovery(email: string, token: string) {
+  await Recovery.insert({ email, token });
+}
+
+export async function deleteRecovery(email: string) {
+  await Recovery.delete({ email });
 }
