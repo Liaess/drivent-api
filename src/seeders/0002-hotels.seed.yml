@@ -1,0 +1,16 @@
+seeds:
+    - Hotel:
+        id: 1
+        name: "Driven Resort"
+        image: "https://i.imgur.com/qnHXlG7.jpg"
+        roomTypes: "single e double"
+    - Hotel:
+        id: 2
+        name: "Driven Palace"
+        image: "https://i.imgur.com/lfrmZ89.jpg"
+        roomTypes: "single, double e triple"
+    - Hotel:
+        id: 3
+        name: "Driven World"
+        image: "https://i.imgur.com/vg6kJF1.jpg"
+        roomTypes: "single e double"
