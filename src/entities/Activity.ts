@@ -69,6 +69,7 @@ export default class Activity extends BaseEntity {
       .leftJoinAndSelect("users_activities", "user", "user.id= :userId", {
         userId,
       })
+      .where({ date })
       .orderBy("activities.id", "ASC")
       .getMany();
 
