@@ -11,8 +11,13 @@ interface JwtPayload {
 
 export default async function authenticationMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
-    const redisClient = createClient();
+    const redisClient = createClient({
+      socket: {
+        url: process.env.REDIS_URL
+      }
+    });
     await redisClient.connect();
+    
     const authHeader = req.header("Authorization");
 
     const token = authHeader?.replace("Bearer ", "");
