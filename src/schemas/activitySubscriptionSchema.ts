@@ -1,5 +1,4 @@
 import joi from "joi";
-import { isJSDocTypedefTag } from "typescript";
 
 export default joi.object({
   id: joi.number().required(),

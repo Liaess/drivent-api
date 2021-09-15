@@ -47,9 +47,11 @@ export async function sendEmail(email: string, token: string) {
         wasSent = true;
       },
       (error) => {
+        // eslint-disable-next-line no-console
         console.error(error);
 
         if (error.response) {
+          // eslint-disable-next-line no-console
           console.error(error.response.body);
         }
       }
