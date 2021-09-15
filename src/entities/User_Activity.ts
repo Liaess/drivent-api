@@ -10,6 +10,7 @@ import {
 import Activity from "./Activity";
 import User from "./User";
 import { ActivityInfo } from "@/interfaces/activity";
+import ScheduleConflictError from "@/errors/ScheduleConflictError";
 
 @Entity("users_activities")
 export default class User_Activity extends BaseEntity {
@@ -41,6 +42,10 @@ export default class User_Activity extends BaseEntity {
       throw new UserAlreadySubscripted();
     }
 
+    if (this.verifyScheduleConflict(userId, activityInfo)) {
+      throw new ScheduleConflictError();
+    }
+
     userActivity = User_Activity.create();
     userActivity.populateSubscription(userId, activityId);
     const activity = await Activity.removeOneSeat(activityId);
@@ -55,11 +60,19 @@ export default class User_Activity extends BaseEntity {
     userId: number,
     activityInfo: ActivityInfo
   ) {
-    const { activityId, beginsAt, finishesAt, date } = activityInfo;
-    const activities = await Activity.getActivitiesByDate(
-      new Date(date),
-      userId
+    const { activityId, beginsAt, finishesAt, locationId } = activityInfo;
+    const date = new Date(activityInfo.date);
+
+    const activities = await Activity.getActivitiesByDate(date, userId);
+    const conflict = activities.find(
+      (a) =>
+        a.date === date &&
+        a.locationId !== locationId &&
+        a.id !== activityId &&
+        ((a.beginsAt < beginsAt && a.finishesAt > beginsAt) ||
+          (a.beginsAt < finishesAt && a.finishesAt > finishesAt))
     );
-    //const conflict = activities.find(a)
+
+    return !!conflict;
   }
 }
