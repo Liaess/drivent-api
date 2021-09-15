@@ -35,7 +35,7 @@ export default class User_Activity extends BaseEntity {
   static async subscription(userId: number, activityId: number) {
     let userActivity = await this.findOne({ where: { userId, activityId } });
 
-    if (!userActivity) {
+    if (userActivity) {
       throw new UserAlreadySubscripted();
     }
 

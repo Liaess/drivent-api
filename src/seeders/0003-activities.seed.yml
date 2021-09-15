@@ -2,32 +2,80 @@ seeds:
   - Activity:
       id: 1
       date: "2021-09-28 00:00:00"
-      title: "Bootbar"
+      title: "RackerRank"
       beginsAt: "09:00 UTC"
       finishesAt: "10:00 UTC"
       remainingSeats: 15
       locationId: 3
   - Activity:
       id: 2
+      date: "2021-09-28 00:00:00"
+      title: "Talk com Pedrão"
+      beginsAt: "09:00 UTC"
+      finishesAt: "10:00 UTC"
+      remainingSeats: 15
+      locationId: 2
+  - Activity:
+      id: 3
       date: "2021-09-29 00:00:00"
-      title: "Bootbar 2"
+      title: "Diversidade em Tec"
       beginsAt: "10:00 UTC"
       finishesAt: "12:00 UTC"
       remainingSeats: 13
       locationId: 1
   - Activity:
-      id: 3
+      id: 4
       date: "2021-09-27 00:00:00"
-      title: "Bootbar"
+      title: "Talk de Empresas"
       beginsAt: "09:00 UTC"
       finishesAt: "12:00 UTC"
       remainingSeats: 15
       locationId: 1
   - Activity:
-      id: 4
+      id: 5
       date: "2021-09-29 00:00:00"
-      title: "Bootbar 2"
+      title: "Geeks For Geeks"
       beginsAt: "10:00 UTC"
       finishesAt: "11:00 UTC"
       remainingSeats: 13
       locationId: 2
+  - Activity:
+      id: 6
+      date: "2021-09-28 00:00:00"
+      title: "MeetUp"
+      beginsAt: "09:00 UTC"
+      finishesAt: "10:00 UTC"
+      remainingSeats: 15
+      locationId: 1
+  - Activity:
+      id: 7
+      date: "2021-09-29 00:00:00"
+      title: "Formatura"
+      beginsAt: "10:00 UTC"
+      finishesAt: "12:00 UTC"
+      remainingSeats: 0
+      locationId: 3
+  - Activity:
+      id: 8
+      date: "2021-09-27 00:00:00"
+      title: "Networking com Devs"
+      beginsAt: "09:00 UTC"
+      finishesAt: "10:00 UTC"
+      remainingSeats: 15
+      locationId: 2
+  - Activity:
+      id: 9
+      date: "2021-09-27 00:00:00"
+      title: "Desenvolvimento Ágil"
+      beginsAt: "09:00 UTC"
+      finishesAt: "10:00 UTC"
+      remainingSeats: 15
+      locationId: 3
+  - Activity:
+      id: 10
+      date: "2021-09-27 00:00:00"
+      title: "Bootbar, por que ir?"
+      beginsAt: "10:00 UTC"
+      finishesAt: "11:00 UTC"
+      remainingSeats: 15
+      locationId: 3

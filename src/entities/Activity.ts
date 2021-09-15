@@ -74,6 +74,9 @@ export default class Activity extends BaseEntity {
       .orderBy("activities.beginsAt", "ASC")
       .getMany();
 
+    // eslint-disable-next-line no-console
+    console.log(activities);
+
     const activitiesResponse: ActivitiesResponse[] = activities.map(
       (a: Activity) => {
         return {

@@ -10,5 +10,8 @@ export async function subscription(req: Request, res: Response) {
     userId,
     activityId
   );
-  res.status(httpStatus.OK).send(remainingSeats);
+    // eslint-disable-next-line no-console
+  console.log("controller", remainingSeats);
+
+  res.status(httpStatus.OK).send({ remainingSeats });
 }
