@@ -39,6 +39,8 @@ export default class User_Activity extends BaseEntity {
     let userActivity = await this.findOne({ where: { userId, activityId } });
 
     if (userActivity) {
+      // eslint-disable-next-line no-console
+      console.log("Conflito por já estar inscrito");
       throw new UserAlreadySubscripted();
     }
 
@@ -70,10 +72,11 @@ export default class User_Activity extends BaseEntity {
     const activities = await Activity.getActivitiesByDate(date, userId);
     const conflict = activities.find(
       (a) =>
+        a.userRegistered &&
         a.locationId !== locationId &&
         a.id !== activityId &&
-        ((a.beginsAt <= beginsAt && a.finishesAt > beginsAt) ||
-          (a.beginsAt < finishesAt && a.finishesAt >= finishesAt))
+        ((a.beginsAt <= beginsAt && beginsAt < a.finishesAt) ||
+          (a.beginsAt < finishesAt && finishesAt <= a.finishesAt))
     );
     // eslint-disable-next-line no-console
     console.log("check conflict", conflict);
