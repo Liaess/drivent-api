@@ -67,7 +67,8 @@ export default class Activity extends BaseEntity {
     userId: number
   ): Promise<ActivitiesResponse[]> {
     const activities = await this.createQueryBuilder("activities")
-      .leftJoinAndSelect("users_activities", "user", "user.id= :userId", {
+      .leftJoinAndSelect("activities.user_activity", "users_activities")
+      .leftJoinAndSelect("users_activities.user", "user", "user.id= :userId", {
         userId,
       })
       .where({ date })

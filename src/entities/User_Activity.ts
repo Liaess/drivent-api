@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import Activity from "./Activity";
 import User from "./User";
+import { ActivityInfo } from "@/interfaces/activity";
 
 @Entity("users_activities")
 export default class User_Activity extends BaseEntity {
@@ -32,7 +33,8 @@ export default class User_Activity extends BaseEntity {
     this.activityId = activityId;
   }
 
-  static async subscription(userId: number, activityId: number) {
+  static async subscription(userId: number, activityInfo: ActivityInfo) {
+    const { activityId, beginsAt, finishesAt, date } = activityInfo;
     let userActivity = await this.findOne({ where: { userId, activityId } });
 
     if (userActivity) {
@@ -47,5 +49,17 @@ export default class User_Activity extends BaseEntity {
       await transactionalEntityManager.save(activity);
     });
     return activity.remainingSeats;
+  }
+
+  static async verifyScheduleConflict(
+    userId: number,
+    activityInfo: ActivityInfo
+  ) {
+    const { activityId, beginsAt, finishesAt, date } = activityInfo;
+    const activities = await Activity.getActivitiesByDate(
+      new Date(date),
+      userId
+    );
+    //const conflict = activities.find(a)
   }
 }
