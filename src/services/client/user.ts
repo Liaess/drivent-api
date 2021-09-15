@@ -38,9 +38,9 @@ export async function sendEmail(email: string, token: string) {
       from: "yann.melo@gmail.com", // Use the email address or domain you verified above
       subject: "Redefina sua senha - DRIVENT",
       text: "and easy to do anywhere, even with Node.js",
-      html: `<strong>REDEFINA SUA SENHA EM: ${
+      html: `<strong>REDEFINA SUA SENHA EM: <a href=${process.env.FRONTEND_URL + "/redefine/" + token} >${
         process.env.FRONTEND_URL + "/redefine/" + token
-      }</strong>`,
+      }</a></strong>`,
     };
     sgMail.send(msg).then(
       () => {
