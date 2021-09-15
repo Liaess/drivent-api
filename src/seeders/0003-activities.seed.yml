@@ -79,3 +79,19 @@ seeds:
       finishesAt: "11:00 UTC"
       remainingSeats: 15
       locationId: 3
+  - Activity:
+      id: 11
+      date: "2021-09-28 00:00:00"
+      title: "Bootbar, por que ir?"
+      beginsAt: "10:00 UTC"
+      finishesAt: "15:00 UTC"
+      remainingSeats: 15
+      locationId: 2
+  - Activity:
+      id: 10
+      date: "2021-09-28 00:00:00"
+      title: "Bootbar, por que ir?"
+      beginsAt: "11:00 UTC"
+      finishesAt: "12:00 UTC"
+      remainingSeats: 15
+      locationId: 3
