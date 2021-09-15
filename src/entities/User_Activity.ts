@@ -45,9 +45,6 @@ export default class User_Activity extends BaseEntity {
     }
 
     if (await this.verifyScheduleConflict(userId, activityInfo)) {
-      const result = await this.verifyScheduleConflict(userId, activityInfo);
-      // eslint-disable-next-line no-console
-      console.log("verificação", result);
       throw new ScheduleConflictError();
     }
 
@@ -79,8 +76,6 @@ export default class User_Activity extends BaseEntity {
           (a.beginsAt < finishesAt && finishesAt <= a.finishesAt) ||
           (a.beginsAt > beginsAt && finishesAt > a.finishesAt))
     );
-    // eslint-disable-next-line no-console
-    console.log("check conflict", conflict);
 
     return !!conflict;
   }
