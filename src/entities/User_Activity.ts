@@ -76,7 +76,8 @@ export default class User_Activity extends BaseEntity {
         a.locationId !== locationId &&
         a.id !== activityId &&
         ((a.beginsAt <= beginsAt && beginsAt < a.finishesAt) ||
-          (a.beginsAt < finishesAt && finishesAt <= a.finishesAt))
+          (a.beginsAt < finishesAt && finishesAt <= a.finishesAt) ||
+          (a.beginsAt > beginsAt && finishesAt > a.finishesAt))
     );
     // eslint-disable-next-line no-console
     console.log("check conflict", conflict);
