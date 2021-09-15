@@ -35,14 +35,19 @@ export default class User_Activity extends BaseEntity {
   }
 
   static async subscription(userId: number, activityInfo: ActivityInfo) {
-    const { activityId, beginsAt, finishesAt, date } = activityInfo;
+    const { beginsAt, finishesAt, date } = activityInfo;
+    const activityId = activityInfo.id;
     let userActivity = await this.findOne({ where: { userId, activityId } });
+    // eslint-disable-next-line no-console
+    console.log("g", userActivity);
 
     if (userActivity) {
       throw new UserAlreadySubscripted();
     }
 
-    if (this.verifyScheduleConflict(userId, activityInfo)) {
+    if (await this.verifyScheduleConflict(userId, activityInfo)) {
+      // eslint-disable-next-line no-console
+      console.log("verificação", this.verifyScheduleConflict(userId, activityInfo));
       throw new ScheduleConflictError();
     }
 
@@ -60,7 +65,8 @@ export default class User_Activity extends BaseEntity {
     userId: number,
     activityInfo: ActivityInfo
   ) {
-    const { activityId, beginsAt, finishesAt, locationId } = activityInfo;
+    const { beginsAt, finishesAt, locationId } = activityInfo;
+    const activityId = activityInfo.id;
     const date = new Date(activityInfo.date);
 
     const activities = await Activity.getActivitiesByDate(date, userId);
@@ -72,6 +78,8 @@ export default class User_Activity extends BaseEntity {
         ((a.beginsAt < beginsAt && a.finishesAt > beginsAt) ||
           (a.beginsAt < finishesAt && a.finishesAt > finishesAt))
     );
+    // eslint-disable-next-line no-console
+    console.log("check conflict", conflict);
 
     return !!conflict;
   }

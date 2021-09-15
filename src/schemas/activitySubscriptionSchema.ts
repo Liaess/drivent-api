@@ -8,7 +8,6 @@ export default joi.object({
   beginsAt: joi.string().required(),
   finishesAt: joi.string().required(),
   title: joi.string().required(),
-  activityId: joi.number().required(),
   remainingSeats: joi.number().required(),
   userRegistered: joi.boolean().required(),
 });

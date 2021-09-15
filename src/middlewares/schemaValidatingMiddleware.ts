@@ -9,6 +9,8 @@ interface ValidationOptions {
 
 export default function schemaValidatingMiddleware(schema: Schema, options: ValidationOptions = { abortEarly: false }) {
   return function(req: Request, res: Response, next: NextFunction) {
+    // eslint-disable-next-line no-console
+    console.log("body", req.body);
     const validation = schema.validate(req.body, { abortEarly: options.abortEarly });
 
     if (validation.error) {
