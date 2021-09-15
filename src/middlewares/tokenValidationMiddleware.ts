@@ -11,6 +11,7 @@ interface JwtPayload {
 
 export default async function authenticationMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
+    console.log(process.env.REDIS_URL);
     let redisClient;
     if(process.env.REDIS_URL) {
       redisClient = createClient({
