@@ -41,6 +41,7 @@ export async function signIn(email: string, password: string) {
     }, process.env.JWT_SECRET);
     
     await redisClient.set(`${user.id}`, token);
+    await redisClient.quit();
 
     return {
       user: {
