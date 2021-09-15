@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
+import { createClient } from "redis";
 
 import jwt from "jsonwebtoken";
 
-import * as sessionService from "@/services/client/session";
 import UnauthorizedError from "@/errors/Unauthorized";
 
 interface JwtPayload {
@@ -11,6 +11,18 @@ interface JwtPayload {
 
 export default async function authenticationMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
+    let redisClient;
+    if(process.env.REDIS_URL) {
+      redisClient = createClient({
+        socket: {
+          url: process.env.REDIS_URL
+        }
+      });
+    } else {
+      redisClient = createClient();
+    }
+    await redisClient.connect();
+    
     const authHeader = req.header("Authorization");
 
     const token = authHeader?.replace("Bearer ", "");
@@ -20,9 +32,9 @@ export default async function authenticationMiddleware(req: Request, res: Respon
   
     const { userId } = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
 
-    const userSession = await sessionService.findSessionByToken(token);
+    const userSession = await redisClient.get(`${userId}`);
 
-    if(userSession.token !== token) {
+    if(userSession !== token) {
       throw new UnauthorizedError();
     }
 

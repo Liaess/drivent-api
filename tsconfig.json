@@ -5,6 +5,7 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "target": "es6",
+    "outDir": "./dist",
     "module": "commonjs",
     "baseUrl": ".",
     "paths": {
@@ -17,5 +18,9 @@
     {
       "transform": "typescript-transform-paths"
     }
+  ],
+  "exclude": [
+    "node_modules",
+    "tests"
   ]
 }
