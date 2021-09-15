@@ -1,6 +1,6 @@
 export default class UnauthorizedError extends Error {
   constructor() {
-    super("You must have something wrong, please check your infomations!");
+    super("Você deve ter digitado algo errado, por favor confira os dados!");
 
     this.name = "UnauthorizedError";
   }
