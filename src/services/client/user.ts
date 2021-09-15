@@ -35,7 +35,7 @@ export async function sendEmail(email: string, token: string) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
       to: `${email}`,
-      from: "phcatanduba@gmail.com", // Use the email address or domain you verified above
+      from: "yann.melo@gmail.com", // Use the email address or domain you verified above
       subject: "Redefina sua senha - DRIVENT",
       text: "and easy to do anywhere, even with Node.js",
       html: `<strong>REDEFINA SUA SENHA EM: ${
