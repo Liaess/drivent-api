@@ -1,28 +1,47 @@
 import jwt from "jsonwebtoken";
+import { createClient } from "redis";
 
 import UnauthorizedError from "@/errors/Unauthorized";
 import User from "@/entities/User";
-import Session from "@/entities/Session";
 
 export async function signIn(email: string, password: string) {
+  const redisClient = createClient({
+    socket: {
+      url: process.env.REDIS_URL
+    }
+  });
+  await redisClient.connect();
+
   const user = await User.findByEmailAndPassword(email, password);
 
   if (!user) {
     throw new UnauthorizedError();
   }
 
-  const token = jwt.sign({
-    userId: user.id
-  }, process.env.JWT_SECRET);
+  const data = await redisClient.get(`${user.id}`);
 
-  await Session.createNew(user.id, token);
+  if(data !== null) { 
+    const token = data;
+    return {
+      user: {
+        id: user.id,
+        email: user.email
+      },
+      token
+    };
+  } else {
+    const token = jwt.sign({
+      userId: user.id
+    }, process.env.JWT_SECRET);
+    
+    redisClient.set(`${user.id}`, token);
 
-  return {
-    user: {
-      id: user.id,
-      email: user.email
-    },
-
-    token
-  };
+    return {
+      user: {
+        id: user.id,
+        email: user.email
+      },
+      token
+    };
+  }
 }
