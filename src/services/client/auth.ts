@@ -5,11 +5,17 @@ import UnauthorizedError from "@/errors/Unauthorized";
 import User from "@/entities/User";
 
 export async function signIn(email: string, password: string) {
-  const redisClient = createClient({
-    socket: {
-      url: process.env.REDIS_URL
-    }
-  });
+  let redisClient;
+  if(process.env.REDIS_URL) {
+    redisClient = createClient({
+      socket: {
+        url: process.env.REDIS_URL
+      }
+    });
+  } else {
+    redisClient = createClient();
+  }
+  
   await redisClient.connect();
 
   const user = await User.findByEmailAndPassword(email, password);
