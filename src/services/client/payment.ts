@@ -6,11 +6,9 @@ export async function getTicket(userId: number) {
 }
 
 export async function createPayment(ticketData: TicketData) {
-  const ticket = await Ticket.createOrUpdate(ticketData);
-  return ticket;
+  return await Ticket.createOrUpdate(ticketData);
 }
 
 export async function updatePaymentStatus(ticketData: TicketData) {
-  const ticket = await Ticket.createOrUpdate(ticketData);
-  return ticket;
+  return await Ticket.createOrUpdate(ticketData);
 }

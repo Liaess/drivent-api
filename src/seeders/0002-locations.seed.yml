@@ -1,0 +1,10 @@
+seeds:
+  - Location:
+      id: 1
+      name: "Auditório Principal"
+  - Location:
+      id: 2
+      name: "Auditório Lateral"
+  - Location:
+      id: 3
+      name: "Sala de Workshop"
