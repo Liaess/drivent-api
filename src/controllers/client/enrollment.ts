@@ -11,6 +11,14 @@ export async function saveEnrollmentInfo(req: Request, res: Response) {
   res.sendStatus(httpStatus.OK);
 }
 
+export async function saveEnrollmentImage(req: Request, res: Response) {
+  const file = req.file as Express.MulterS3.File;
+  const id = req.user.id;
+  await enrollmentService.createNewEnrollmentImage(id, file);
+  const enrollmentInfo = await enrollmentService.getEnrollmentWithAddress(id);
+  res.send(enrollmentInfo).status(httpStatus.OK);
+}
+
 export async function getEnrollmentInfos(req: Request, res: Response) {
   const enrollmentInfo = await enrollmentService.getEnrollmentWithAddress(req.user.id);
 

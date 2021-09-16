@@ -6,6 +6,7 @@ interface EnrollmentData {
     birthday: string,
     address: AddressData,
     phone: string, 
+    image: string,
     userId: number
 }
 
