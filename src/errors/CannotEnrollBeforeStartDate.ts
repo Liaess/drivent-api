@@ -1,6 +1,6 @@
 export default class CannotEnrollBeforeStartDateError extends Error {
   constructor() {
-    super("Cannot enroll before event start date!");
+    super("Não é possivel se cadastrar antes do evento ter começado!");
 
     this.name = "CannotEnrollBeforeStartDateError";
   }

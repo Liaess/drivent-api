@@ -50,6 +50,6 @@ export default function errorHandlingMiddleware (err: Error, _req: Request, res:
   /* eslint-disable-next-line no-console */
   console.error(err);
   res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
-    message: "Internal Server Error!"
+    message: "Error interno no servidor!"
   });
 }
