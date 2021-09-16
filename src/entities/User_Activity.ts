@@ -39,8 +39,6 @@ export default class User_Activity extends BaseEntity {
     let userActivity = await this.findOne({ where: { userId, activityId } });
 
     if (userActivity) {
-      // eslint-disable-next-line no-console
-      console.log("Conflito por já estar inscrito");
       throw new UserAlreadySubscripted();
     }
 
@@ -55,7 +53,6 @@ export default class User_Activity extends BaseEntity {
       await transactionalEntityManager.save(userActivity);
       await transactionalEntityManager.save(activity);
     });
-    return activity.remainingSeats;
   }
 
   static async verifyScheduleConflict(

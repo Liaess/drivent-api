@@ -1,6 +1,5 @@
 import supertest from "supertest";
 import httpStatus from "http-status";
-import dayjs from "dayjs";
 
 import app, { init } from "../../src/app";
 import { clearDatabase, endConnection } from "../utils/database";

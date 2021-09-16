@@ -6,9 +6,6 @@ import * as usersActivitiesService from "@/services/client/users_activities";
 export async function subscription(req: Request, res: Response) {
   const activityInfo = req.body;
   const userId = req.user.id;
-  const remainingSeats = await usersActivitiesService.subscription(
-    userId,
-    activityInfo
-  );
-  res.status(httpStatus.OK).send({ remainingSeats });
+  await usersActivitiesService.subscription(userId, activityInfo);
+  res.sendStatus(httpStatus.OK);
 }
