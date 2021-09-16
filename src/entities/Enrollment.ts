@@ -20,7 +20,7 @@ export default class Enrollment extends BaseEntity {
   @Column()
   phone: string;
 
-  @Column()
+  @Column( { default: null } )
   image: string;
 
   @Column()
@@ -35,7 +35,6 @@ export default class Enrollment extends BaseEntity {
     this.birthday = data.birthday;
     this.phone = data.phone;
     this.userId = data.userId;
-    this.image = data.image;
 
     this.address ||= Address.create();
     const { address } = this;
@@ -47,6 +46,10 @@ export default class Enrollment extends BaseEntity {
     address.state = data.address.state;
     address.neighborhood = data.address.neighborhood;
     address.addressDetail = data.address.addressDetail;
+  }
+
+  populateImage(URL: string) {
+    this.image = URL;
   }
 
   static async createOrUpdate(data: EnrollmentData) {
@@ -62,6 +65,16 @@ export default class Enrollment extends BaseEntity {
       await transactionalEntityManager.save(Enrollment, enrollment);
       enrollment.address.enrollmentId = enrollment.id;
       await transactionalEntityManager.save(Address, enrollment.address);
+    });
+  }
+
+  static async createOrUpdateImage(userId: number, file: any) {
+    let enrollment = await this.findOne({ where: { userId: userId } });
+
+    await getManager().transaction( async transactionalEntityManager => {
+      enrollment ||= Enrollment.create();
+      enrollment.populateImage(file.location);
+      await transactionalEntityManager.save(Enrollment, enrollment);
     });
   }
 
